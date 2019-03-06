@@ -154,7 +154,9 @@ router.get('/passo/:id', function (req, res) {
     }).then(data => {
         var processo = data[0].dataValues;
         var state = JSON.parse(processo.json_instancia_processo);
-        
+        var todosPassos = [];
+
+
         Bpmn.Engine.resume(state,{moddleOptions: {
             camunda: require('camunda-bpmn-moddle/resources/camunda')
         }},(err,newEngine) => {
@@ -174,17 +176,14 @@ router.get('/passo/:id', function (req, res) {
                     res.status(200).json({
                         status:"finalizado",
                         task: task.id,
-                        type: task.type
+                        type: task.type,
+                        passosanteriores: todosPassos
                     });
                 }
             });
 
             listener.on('wait', (task,instance) => {
                 console.log("EVENTO wait " + task.id);
-            
-                //var process = task.parentContext.moddleContext.rootHandler.element.rootElements.find(c => c.$type === 'bpmn:Process');
-                //console.log(process.laneSets[0].lanes);
-                //console.log(task.parentContext);
 
                 var inputoutput = task.activity.extensionElements.values[0];
                 var flagcontinue = true;
@@ -194,7 +193,18 @@ router.get('/passo/:id', function (req, res) {
                         if(item.name == "done" && item['value'] == "true"){
                             console.log("VARIAVEL DONE TRUE -> CONTINUANDO");
                             flagcontinue = false;
+                            const lane = instance.context.moddleContext.references.find((p) => p.id === task.id);
+                            var passoRealizado = {
+                                passo: task.id,
+                                papel: lane.element.name,
+                                variaveis: inputoutput['inputParameters']
+                            };
+                            if(inputoutput['outputParameters'] != undefined){
+                                passoRealizado.variaveis.push(inputoutput['outputParameters']);
+                            }
+                            todosPassos.push(passoRealizado);
                             instance.signal(task.id);
+                            
                         }
                     }
                 }
@@ -202,12 +212,31 @@ router.get('/passo/:id', function (req, res) {
                     if (task.type === 'bpmn:UserTask') {
                         console.log("TASK EM WAIT - " + task.id);  
                         newEngine.stop();
-                        
-                        res.status(200).json({
+                        var possuiaprovacao = false;
+                        var aprovado = undefined;
+                        if(inputoutput['outputParameters'] != undefined){
+
+                            for(var i=0;i<inputoutput['outputParameters'].length;i++){
+                                var item = inputoutput['outputParameters'][i];
+                                if(item.name == "aprovacao"){
+                                    possuiaprovacao = true;
+                                    aprovado = (item.value == '${true}')
+                                }
+                            }
+                        }
+                        const lane = instance.context.moddleContext.references.find((p) => p.id === task.id);
+                        var estadodopasso = {
                             status:"em execução",
                             task: task.id,
-                            type: task.type
-                        });
+                            type: task.type,
+                            possuiaprovacao: possuiaprovacao,
+                            papel: lane.element.name,
+                            passosanteriores: todosPassos
+                        };
+                        if (aprovado != undefined){
+                            estadodopasso.aprovado = aprovado;
+                        }
+                        res.status(200).json(estadodopasso);
 
                     }
                 }
@@ -226,7 +255,7 @@ router.get('/passo/:id', function (req, res) {
         });
     }).catch(function(err){
         console.log(err);
-        res.status(500).send({message: "Não foi possível recuperar os dados dos modelos de processos.", error : err});
+        res.status(500).send({message: "Não foi possível recuperar os dados da instancia do processos.", error : err});
     });
 });
 
@@ -242,16 +271,28 @@ router.get('/passo/:id', function (req, res) {
  *          in: formData
  *          required: true
  *          type: integer
-  *        - name: status
+ *        - name: status
  *          description: true - realizado / false - não realizado
  *          in: formData
  *          required: true
  *          type: boolean
+ *        - name: aprovacao
+ *          description: true - passo aprovado / false - passo reprovado
+ *          in: formData
+ *          required: false
+ *          type: boolean
+  *        - name: idusuarioaprovacao
+ *          description: ID da entidade usuário que realizou a aprovação
+ *          in: formData
+ *          required: false
+ *          type: integer
  *      produces:
  *        - application/json
  *      responses:
  *        200:
  *          description: Objeto JSON contendo dados do passo atual do processo
+ *        400:
+ *          description: É retornado quando um passo exige um valor para o atributo aprovacao e esse valor não foi informado
  *        500:
  *          description: Erro que não foi possível recuperar o passo atual do processo
  */
@@ -312,10 +353,6 @@ router.post('/passorealizado', function (req, res) {
         
             listener.on('wait', (task,instance) => {
                 console.log("EVENTO wait " + task.id);
-            
-                //var process = task.parentContext.moddleContext.rootHandler.element.rootElements.find(c => c.$type === 'bpmn:Process');
-                //console.log(process.laneSets[0].lanes);
-                //console.log(task.parentContext);
 
                 var inputoutput = task.activity.extensionElements.values[0];
                 var flagcontinue = true;
@@ -332,6 +369,42 @@ router.post('/passorealizado', function (req, res) {
                 if(flagcontinue){
                     if (task.type === 'bpmn:UserTask') {
                         console.log("TASK EM WAIT - " + task.id);
+                        var possuiaprovacao = false;
+                        if(inputoutput['outputParameters'] != undefined){
+
+                            for(var i=0;i<inputoutput['outputParameters'].length;i++){
+                                var item = inputoutput['outputParameters'][i];
+                                if(item.name == "aprovacao"){
+                                    possuiaprovacao = true;
+                                }
+                            }
+                        }
+                        if (possuiaprovacao){
+                            if(req.body.aprovacao == undefined){
+                                newEngine.stop();
+                                res.status(400).send({message: "Passo possui APROVACAO, e parametro aprovacao não foi informado"});
+                                return;
+                            }else{
+                                if(inputoutput['outputParameters'] != undefined){
+                                    for(var i=0;i<inputoutput['outputParameters'].length;i++){
+                                        var item = inputoutput['outputParameters'][i];
+                                        if(item.name == "aprovacao"){
+                                                
+                                            if(req.body.aprovacao == "true"){
+                                                item.value = '${true}';
+                                            }else{
+                                                item.value = '${false}';
+                                            }
+                                        }
+                                        if(item.name == "idusuarioaprovacao"){
+                                            if(req.body.idusuarioaprovacao != undefined){
+                                                item.value = req.body.idusuarioaprovacao;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         if(req.body.status == "true"){
                             if(inputoutput['inputParameters'] != undefined){
@@ -345,9 +418,12 @@ router.post('/passorealizado', function (req, res) {
                                 }
                             }
                         }
-
-                        newEngine.stop();
-
+                        var next = task.outbound[0].targetId;
+                        var nextTask = instance.context.moddleContext.elementsById[next];
+                        if (nextTask.$type =="bpmn:EndEvent")
+                            instance.signal(task.id);
+                        else
+                            newEngine.stop();
                     }
                 }
             });
