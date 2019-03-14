@@ -10,14 +10,18 @@ const models = require('../models');
 router.post('/', function (req, res) {
     models.Usuario.create({
             login : req.body.login,
-            senha: req.body.senha,
+            senha: req.body.senha          
         })
         .then(usuario => {
+            usuario.setPessoa(req.body.pessoa)
             usuario.addPerfil(req.body.perfis)
             res.status(200).send(usuario)
           }
         )
-        .catch(err => res.status(500).send("Houve um problema ao adicionar os dados no banco de dados."))
+        .catch(err => {
+          console.log(err)
+          res.status(500).send("Houve um problema ao adicionar os dados no banco de dados.")}
+        )
 })
 
 // retornar todos os usuários

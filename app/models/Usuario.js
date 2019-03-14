@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Usuarios'
   });
   Usuario.associate = function(models) {
+    Usuario.belongsTo(models.Pessoa, { foreignKey: 'id' })
     Usuario.belongsToMany(models.Perfil, { through: models.UsuarioPerfil, foreignKey: 'id_usuario'});
   };
   return Usuario;

@@ -38,9 +38,6 @@ module.exports = {
       end_complemento: {
         type: Sequelize.STRING
       },
-      rua: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

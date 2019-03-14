@@ -4,12 +4,13 @@ module.exports = {
     return queryInterface.createTable('Usuarios', {
       id: {
         allowNull: false,
+        autoIncrement: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'Pessoas',
           key: 'id',
-       },
+       }
       },
       login: {
         type: Sequelize.STRING
