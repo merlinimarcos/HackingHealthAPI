@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Solicitacao = sequelize.define('Solicitacao', {
-    id_usuario: DataTypes.NUMBER,
-    tipo_solicitacao: DataTypes.NUMBER,
+    id_usuario: DataTypes.INTEGER,
+    tipo_solicitacao: DataTypes.INTEGER,
     descricao: DataTypes.STRING,
     dt_solicitacao: DataTypes.DATE
   }, {

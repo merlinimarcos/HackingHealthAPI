@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Usuario = sequelize.define('Usuario', {
     login: DataTypes.STRING,
     senha: DataTypes.STRING,
-    id_rede: DataTypes.NUMBER,
-    instituicao: DataTypes.NUMBER,
+    id_rede: DataTypes.INTEGER,
+    instituicao: DataTypes.INTEGER,
     data_ult_acesso: DataTypes.DATE
   }, {
     freezeTableName: true,

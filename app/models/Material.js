@@ -1,10 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Material = sequelize.define('Material', {
-    id_grupo: DataTypes.NUMBER,
-    id_unidade: DataTypes.NUMBER,
+    id_grupo: DataTypes.INTEGER,
+    id_unidade: DataTypes.INTEGER,
     descricao_material: DataTypes.STRING,
-    valor: DataTypes.NUMBER
+    valor: DataTypes.DECIMAL(10, 2)
   }, {
     freezeTableName: true,
     tableName: 'Materiais'

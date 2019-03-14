@@ -1,9 +1,9 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const StatusAtualSolicitacao = sequelize.define('StatusAtualSolicitacao', {
-    id_solicitacao: DataTypes.NUMBER,
-    id_status: DataTypes.NUMBER,
-    id_usuario: DataTypes.NUMBER,
+    id_solicitacao: DataTypes.INTEGER,
+    id_status: DataTypes.INTEGER,
+    id_usuario: DataTypes.INTEGER,
     feedback: DataTypes.STRING,
     db_status: DataTypes.DATE
   }, {

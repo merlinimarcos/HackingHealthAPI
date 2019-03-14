@@ -6,12 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     estado_civil: DataTypes.STRING,
     interprete: DataTypes.STRING,
     idioma: DataTypes.STRING,
-    responsavel: DataTypes.NUMBER,
-    reside_com: DataTypes.NUMBER,
-    renda_familiar: DataTypes.NUMBER,
+    responsavel: DataTypes.INTEGER,
+    reside_com: DataTypes.INTEGER,
+    renda_familiar: DataTypes.DECIMAL(10, 2),
     tipo_parto: DataTypes.STRING,
-    ano_mes_cadastro: DataTypes.NUMBER,
-    sequencia_ano_cadastro: DataTypes.NUMBER,
+    ano_mes_cadastro: DataTypes.INTEGER,
+    sequencia_ano_cadastro: DataTypes.INTEGER,
     senha_consulta_solicitacao: DataTypes.STRING,
     dt_ultima_consulta: DataTypes.DATE
   }, {
