@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1aceo95" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.2.4">
+  <bpmn:collaboration id="Collaboration_1ipgryu">
+    <bpmn:participant id="medicosolicitante" name="medicosolicitante" processRef="Process_0wxwa2o" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0wxwa2o" name="medicosolicitante" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_04v0vtk">
+      <bpmn:lane id="Lane_13wvmra" name="medico">
+        <bpmn:flowNodeRef>startevent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>task1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0oymyfg" name="shriner">
+        <bpmn:flowNodeRef>task2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ExclusiveGateway_18c6n90</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>endevent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>task3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>task4</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:sequenceFlow id="SequenceFlow_153ozi1" sourceRef="startevent" targetRef="task1" />
+    <bpmn:startEvent id="startevent">
+      <bpmn:outgoing>SequenceFlow_153ozi1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="task1" name="task1">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="done">false</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_153ozi1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06jy0lv</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_06jy0lv" sourceRef="task1" targetRef="task2" />
+    <bpmn:userTask id="task2" name="task2">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="done">false</camunda:inputParameter>
+          <camunda:outputParameter name="aprovacao" />
+          <camunda:outputParameter name="idusuarioaprovacao" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_06jy0lv</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0e5lyjo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_18c6n90" default="SequenceFlow_1t3xiyo">
+      <bpmn:incoming>SequenceFlow_0e5lyjo</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0pvdmde</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1t3xiyo</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="endevent">
+      <bpmn:incoming>SequenceFlow_114upis</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0m4nxqq</bpmn:incoming>
+      <bpmn:terminateEventDefinition />
+    </bpmn:endEvent>
+    <bpmn:userTask id="task3" name="task3">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="done">false</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0pvdmde</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_114upis</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="task4" name="task4">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="done">false</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1t3xiyo</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0m4nxqq</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0e5lyjo" sourceRef="task2" targetRef="ExclusiveGateway_18c6n90" />
+    <bpmn:sequenceFlow id="SequenceFlow_0pvdmde" sourceRef="ExclusiveGateway_18c6n90" targetRef="task3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${variables.aprovacao}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1t3xiyo" sourceRef="ExclusiveGateway_18c6n90" targetRef="task4" />
+    <bpmn:sequenceFlow id="SequenceFlow_114upis" sourceRef="task3" targetRef="endevent" />
+    <bpmn:sequenceFlow id="SequenceFlow_0m4nxqq" sourceRef="task4" targetRef="endevent" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1ipgryu">
+      <bpmndi:BPMNShape id="StartEvent_01085q2_di" bpmnElement="startevent">
+        <dc:Bounds x="246" y="-96" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0t9fj36_di" bpmnElement="endevent">
+        <dc:Bounds x="1107" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1093" y="597" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0kvjh27_di" bpmnElement="task3">
+        <dc:Bounds x="884" y="45" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_18ypbkn_di" bpmnElement="task4">
+        <dc:Bounds x="884" y="152" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1terfq6_di" bpmnElement="task1">
+        <dc:Bounds x="386" y="-118" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1c9kapp_di" bpmnElement="task2">
+        <dc:Bounds x="483" y="45" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0wf22q6_di" bpmnElement="ExclusiveGateway_18c6n90" isMarkerVisible="true">
+        <dc:Bounds x="730" y="60" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="753" y="674" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_07zkryh_di" bpmnElement="medicosolicitante">
+        <dc:Bounds x="184" y="-145" width="1009" height="426" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_153ozi1_di" bpmnElement="SequenceFlow_153ozi1">
+        <di:waypoint x="282" y="-78" />
+        <di:waypoint x="386" y="-78" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Lane_13wvmra_di" bpmnElement="Lane_13wvmra">
+        <dc:Bounds x="214" y="-145" width="979" height="127" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0oymyfg_di" bpmnElement="Lane_0oymyfg">
+        <dc:Bounds x="214" y="-18" width="979" height="299" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_06jy0lv_di" bpmnElement="SequenceFlow_06jy0lv">
+        <di:waypoint x="436" y="-38" />
+        <di:waypoint x="436" y="96" />
+        <di:waypoint x="483" y="96" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0e5lyjo_di" bpmnElement="SequenceFlow_0e5lyjo">
+        <di:waypoint x="583" y="85" />
+        <di:waypoint x="730" y="85" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0pvdmde_di" bpmnElement="SequenceFlow_0pvdmde">
+        <di:waypoint x="780" y="85" />
+        <di:waypoint x="884" y="85" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1t3xiyo_di" bpmnElement="SequenceFlow_1t3xiyo">
+        <di:waypoint x="755" y="110" />
+        <di:waypoint x="755" y="192" />
+        <di:waypoint x="884" y="192" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_114upis_di" bpmnElement="SequenceFlow_114upis">
+        <di:waypoint x="984" y="85" />
+        <di:waypoint x="1046" y="85" />
+        <di:waypoint x="1046" y="110" />
+        <di:waypoint x="1107" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0m4nxqq_di" bpmnElement="SequenceFlow_0m4nxqq">
+        <di:waypoint x="984" y="192" />
+        <di:waypoint x="1046" y="192" />
+        <di:waypoint x="1046" y="110" />
+        <di:waypoint x="1107" y="110" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,42 +1,35 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Usuarios', {
+    return queryInterface.createTable('Solicitacoes', {
       id: {
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Pessoas',
-          key: 'id',
-       }
+        type: Sequelize.INTEGER
       },
-      login: {
-        type: Sequelize.STRING
-      },
-      senha: {
-        type: Sequelize.STRING
-      },
-      rede: {
-          allowNull: false,
-          primaryKey: false,
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Redes',
-            key: 'id',
-        }
-      },
-      instituicao: {
+      id_usuario: {
         allowNull: false,
         primaryKey: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'PessoasJuridicas',
+          model: 'Usuarios',
           key: 'id',
         }
       },
-      data_ult_acesso: {
+      tipo_solicitacao: {
+          allowNull: false,
+          primaryKey: false,
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'TiposSolicitacoes',
+            key: 'id',
+        }
+      },
+      descricao: {
+        type: Sequelize.STRING
+      },
+      dt_solicitacao: {
         type: Sequelize.DATE
       },
       createdAt: {
@@ -50,6 +43,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Usuarios');
+    return queryInterface.dropTable('Solicitacoes');
   }
 };

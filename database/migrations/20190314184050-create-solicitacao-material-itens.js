@@ -1,43 +1,39 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Usuarios', {
+    return queryInterface.createTable('SolicitacaoMaterialItens', {
       id: {
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Pessoas',
-          key: 'id',
-       }
+        type: Sequelize.INTEGER
       },
-      login: {
-        type: Sequelize.STRING
-      },
-      senha: {
-        type: Sequelize.STRING
-      },
-      rede: {
-          allowNull: false,
-          primaryKey: false,
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Redes',
-            key: 'id',
-        }
-      },
-      instituicao: {
+      id_solicitacao_material: {
         allowNull: false,
         primaryKey: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'PessoasJuridicas',
+          model: 'SolicitacaoMateriais',
           key: 'id',
         }
       },
-      data_ult_acesso: {
-        type: Sequelize.DATE
+      id_material: {
+        allowNull: false,
+        primaryKey: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Materiais',
+          key: 'id',
+        }
+      },
+      quantidade: {
+        type: Sequelize.DECIMAL(10, 2)
+      },
+      entregue: {
+        type: Sequelize.BOOLEAN
+      },
+      valor_estimado: {
+        type: Sequelize.DECIMAL(10, 2)
       },
       createdAt: {
         allowNull: false,
@@ -50,6 +46,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Usuarios');
+    return queryInterface.dropTable('SolicitacaoMaterialItens');
   }
 };
