@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     id_status: DataTypes.INTEGER,
     id_usuario: DataTypes.INTEGER,
     feedback: DataTypes.STRING,
-    db_status: DataTypes.DATE
+    data_status: DataTypes.DATE
   }, {
     freezeTableName: true,
     tableName: 'StatusAtualSolicitacao'

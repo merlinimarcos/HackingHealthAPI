@@ -7,13 +7,14 @@ module.exports = {
         autoIncrement: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'Pessoas',
           key: 'id',
        }
       },
       cnpj: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

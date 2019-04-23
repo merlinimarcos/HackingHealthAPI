@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Pessoas'
   });
   Pessoa.associate = function(models) {
-    Pessoa.hasOne(models.Usuario, {foreignKey: 'id'});    
+    Pessoa.hasOne(models.Usuario, {foreignKey: 'id', onDelete: 'cascade'});    
+    Pessoa.hasOne(models.PessoaFisica, {foreignKey: 'id', onDelete: 'cascade'});    
+    Pessoa.hasOne(models.PessoaJuridica, {foreignKey: 'id', onDelete: 'cascade'});    
   };
   return Pessoa;
 };

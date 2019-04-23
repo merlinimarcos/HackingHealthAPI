@@ -11,15 +11,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
+    "bpmn-engine": "^4.2.0",
+    "camunda-bpmn-moddle": "^3.2.0",
+    "cookie-parser": "^1.4.4",
+    "dotenv-safe": "^6.1.0",
     "express": "^4.16.4",
+    "express-http-proxy": "^1.5.1",
+    "helmet": "^3.16.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.42.0",
     "swagger-jsdoc": "^3.2.7",
-    "swagger-ui-express": "^4.0.2",
-    "bpmn-engine": "^4.2.0",
-    "camunda-bpmn-moddle": "^3.2.0"
+    "swagger-ui-express": "^4.0.2"
   },
   "devDependencies": {
     "sequelize-cli": "^5.4.0"

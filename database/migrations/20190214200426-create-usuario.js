@@ -7,18 +7,22 @@ module.exports = {
         autoIncrement: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'Pessoas',
           key: 'id',
        }
       },
       login: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       senha: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
-      rede: {
+      id_rede: {
           allowNull: false,
           primaryKey: false,
           type: Sequelize.INTEGER,
@@ -27,7 +31,7 @@ module.exports = {
             key: 'id',
         }
       },
-      instituicao: {
+      id_instituicao: {
         allowNull: false,
         primaryKey: false,
         type: Sequelize.INTEGER,

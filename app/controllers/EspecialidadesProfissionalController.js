@@ -5,33 +5,33 @@ const models = require('../models');
 
 /**
  * @swagger
- * /perfis:
+ * /especialidades-profissional:
  *    post:
- *      description: Insere um novo perfil
+ *      description: Insere uma nova especialidade de profissional
  *      produces:
  *        - application/json
  *      parameters:
  *        - name: descricao
- *          description: Descrição do perfil
+ *          description: Descrição da especialidade
  *          in: formData
  *          required: true
  *          type: string
  *      responses:
  *        200:
- *          description: Objeto JSON que representa o novo perfil
+ *          description: Objeto JSON que representa a nova especialidade
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
 router.post('/', security.verifyJWT, function (req, res) {
-    models.Perfil.create(req.body)
-        .then(perfil => res.status(200).send(perfil))
+    models.EspecialidadeProfissional.create(req.body)
+        .then(especialidade => res.status(200).send(especialidade))
         .catch(err => res.status(500).send({error: err}))
 })
 
 /**
  * @swagger
  * definitions:
- *   Perfis:
+ *   EspecialidadeProfissional:
  *     type: object
  *     properties:
  *       id:
@@ -43,46 +43,46 @@ router.post('/', security.verifyJWT, function (req, res) {
  *       updatedAt: 
  *         type: date
  * 
- * /perfis:
+ * /especialidades-profissional:
  *    get:
- *      description: Retorna todos os perfis cadastrados
+ *      description: Retorna todas as especialidades de profissionais de saúde cadastradas
  *      produces:
  *        - application/json
  *      responses:
  *        200:
- *          description: Lista de perfis
+ *          description: Lista de especialidades de profissionais
  *          schema:
- *            $ref: '#/definitions/Perfil'
+ *            $ref: '#/definitions/EspecialidadeProfissional'
  *        500:
- *          description: Erro que não foi possível recuperar os perfis
+ *          description: Erro que não foi possível recuperar as especialidades
  */
 router.get('/', security.verifyJWT, function (req, res) {
-    models.Perfil.findAll()
-    .then(perfis => res.status(200).send(perfis))
+    models.EspecialidadeProfissional.findAll()
+    .then(especialidades => res.status(200).send(especialidades))
     .catch(err => res.status(500).send({error: err}))
 })
 
 /**
  * @swagger
- * /perfis/:id:
+ * /especialidades-profissional/:id:
  *    get:
- *      description: Retorna um perfil pelo id
+ *      description: Retorna uma especialidade de profissional pelo id
  *      produces:
  *        - application/json
  *      responses:
  *        200:
- *          description: Objeto JSON com o perfil
+ *          description: Objeto JSON com a especialidade de profissional
  *        404:
- *          description: Perfil não encontrado
+ *          description: Especialidade não encontrada
  *        500:
- *          description: Erro que não foi possível buscar o perfil
+ *          description: Erro que não foi possível buscar a especialidade
  */
 router.get('/:id', security.verifyJWT, function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil =>
+    models.EspecialidadeProfissional.findById(req.params.id)
+    .then(especialidade =>
       {
-        if (!perfil) res.status(404).send("Not Found");
-        res.status(200).send(perfil)
+        if (!especialidade) res.status(404).send("Not Found");
+        res.status(200).send(especialidade)
       }
     )
     .catch(err => res.status(500).send({error: err}))
@@ -90,28 +90,28 @@ router.get('/:id', security.verifyJWT, function (req, res) {
 
 /**
  * @swagger
- * /perfis/:id:
+ * /especialidades-profissional/:id:
  *    delete:
- *      description: Excluí um perfil
+ *      description: Excluí uma especialidade de profissional
  *      produces:
  *        - application/json
  *      responses:
  *        200:
  *          description: Objeto JSON com mensagem de sucesso
  *        404:
- *          description: Perfil não encontrado
+ *          description: Especialidade não encontrada
  *        500:
- *          description: Erro que não foi possível excluir o perfil
+ *          description: Erro que não foi possível excluir a especialidade
  */
 router.delete('/:id', security.verifyJWT, function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil => {
-      if (!perfil) res.status(404).send("Not Found")
+    models.EspecialidadeProfissional.findById(req.params.id)
+    .then(especialidade => {
+      if (!especialidade) res.status(404).send("Not Found")
 
-      models.Perfil.destroy({
+      models.EspecialidadeProfissional.destroy({
         where: { id: req.params.id }
       })
-      .then(perfil => {
+      .then(especialidade => {
         res.status(200).send({success: true})
       })
       .catch(err => res.status(500).send({error: err}))
@@ -121,33 +121,33 @@ router.delete('/:id', security.verifyJWT, function (req, res) {
 
 /**
  * @swagger
- * /perfil/:id:
+ * /especialidades-profissional/:id:
  *    put:
- *      description: Atualiza um perfil
+ *      description: Atualiza uma especialidade de profissional
  *      produces:
  *        - application/json
  *      parameters:
  *        - name: descricao
- *          description: Descrição do perfil
+ *          description: Descrição da especialidade
  *          in: formData
  *          required: true
  *          type: string
  *      responses:
  *        200:
- *          description: Objeto JSON que representa a atualização do perfil
+ *          description: Objeto JSON que representa a atualização da especialidade
  *        404:
- *          description: Perfil não encontrado
+ *          description: Especialidade não encontrada
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
 router.put('/:id', security.verifyJWT,function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil => {
-        if (!perfil) res.status(404).send("Not Found")
+    models.EspecialidadeProfissional.findById(req.params.id)
+    .then(especialidade => {
+        if (!especialidade) res.status(404).send("Not Found")
 
-        perfil.updateAttributes(req.body)
+        especialidade.updateAttributes(req.body)
 
-        res.status(200).send(perfil)
+        res.status(200).send(especialidade)
 
     })
     .catch(err => {

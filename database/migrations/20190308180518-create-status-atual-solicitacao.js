@@ -41,7 +41,7 @@ module.exports = {
       feedback: {
         type: Sequelize.STRING
       },
-      db_status: {
+      data_status: {
         type: Sequelize.DATE
       },
       createdAt: {

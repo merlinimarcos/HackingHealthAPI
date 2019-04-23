@@ -5,33 +5,33 @@ const models = require('../models');
 
 /**
  * @swagger
- * /perfis:
+ * /redes:
  *    post:
- *      description: Insere um novo perfil
+ *      description: Insere uma nova rede
  *      produces:
  *        - application/json
  *      parameters:
  *        - name: descricao
- *          description: Descrição do perfil
+ *          description: Descrição da rede
  *          in: formData
  *          required: true
  *          type: string
  *      responses:
  *        200:
- *          description: Objeto JSON que representa o novo perfil
+ *          description: Objeto JSON que representa a nova rede
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
 router.post('/', security.verifyJWT, function (req, res) {
-    models.Perfil.create(req.body)
-        .then(perfil => res.status(200).send(perfil))
+    models.Rede.create(req.body)
+        .then(rede => res.status(200).send(rede))
         .catch(err => res.status(500).send({error: err}))
 })
 
 /**
  * @swagger
  * definitions:
- *   Perfis:
+ *   Rede:
  *     type: object
  *     properties:
  *       id:
@@ -43,46 +43,46 @@ router.post('/', security.verifyJWT, function (req, res) {
  *       updatedAt: 
  *         type: date
  * 
- * /perfis:
+ * /redes:
  *    get:
- *      description: Retorna todos os perfis cadastrados
+ *      description: Retorna todas as redes
  *      produces:
  *        - application/json
  *      responses:
  *        200:
- *          description: Lista de perfis
+ *          description: Lista de redes
  *          schema:
- *            $ref: '#/definitions/Perfil'
+ *            $ref: '#/definitions/Rede'
  *        500:
- *          description: Erro que não foi possível recuperar os perfis
+ *          description: Erro que não foi possível recuperar as redes
  */
 router.get('/', security.verifyJWT, function (req, res) {
-    models.Perfil.findAll()
-    .then(perfis => res.status(200).send(perfis))
+    models.Rede.findAll()
+    .then(redes => res.status(200).send(redes))
     .catch(err => res.status(500).send({error: err}))
 })
 
 /**
  * @swagger
- * /perfis/:id:
+ * /redes/:id:
  *    get:
- *      description: Retorna um perfil pelo id
+ *      description: Retorna uma rede pelo id
  *      produces:
  *        - application/json
  *      responses:
  *        200:
- *          description: Objeto JSON com o perfil
+ *          description: Objeto JSON com a rede
  *        404:
- *          description: Perfil não encontrado
+ *          description: rede não encontrada
  *        500:
- *          description: Erro que não foi possível buscar o perfil
+ *          description: Erro que não foi possível buscar a rede
  */
 router.get('/:id', security.verifyJWT, function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil =>
+    models.Rede.findById(req.params.id)
+    .then(rede =>
       {
-        if (!perfil) res.status(404).send("Not Found");
-        res.status(200).send(perfil)
+        if (!rede) res.status(404).send("Not Found");
+        res.status(200).send(rede)
       }
     )
     .catch(err => res.status(500).send({error: err}))
@@ -90,28 +90,28 @@ router.get('/:id', security.verifyJWT, function (req, res) {
 
 /**
  * @swagger
- * /perfis/:id:
+ * /redes/:id:
  *    delete:
- *      description: Excluí um perfil
+ *      description: Excluí uma rede
  *      produces:
  *        - application/json
  *      responses:
  *        200:
  *          description: Objeto JSON com mensagem de sucesso
  *        404:
- *          description: Perfil não encontrado
+ *          description: rede não encontrada
  *        500:
- *          description: Erro que não foi possível excluir o perfil
+ *          description: Erro que não foi possível excluir a rede
  */
 router.delete('/:id', security.verifyJWT, function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil => {
-      if (!perfil) res.status(404).send("Not Found")
+    models.Rede.findById(req.params.id)
+    .then(rede => {
+      if (!rede) res.status(404).send("Not Found")
 
-      models.Perfil.destroy({
+      models.Rede.destroy({
         where: { id: req.params.id }
       })
-      .then(perfil => {
+      .then(rede => {
         res.status(200).send({success: true})
       })
       .catch(err => res.status(500).send({error: err}))
@@ -121,33 +121,33 @@ router.delete('/:id', security.verifyJWT, function (req, res) {
 
 /**
  * @swagger
- * /perfil/:id:
+ * /redes/:id:
  *    put:
- *      description: Atualiza um perfil
+ *      description: Atualiza uma rede
  *      produces:
  *        - application/json
  *      parameters:
  *        - name: descricao
- *          description: Descrição do perfil
+ *          description: Descrição da rede
  *          in: formData
  *          required: true
  *          type: string
  *      responses:
  *        200:
- *          description: Objeto JSON que representa a atualização do perfil
+ *          description: Objeto JSON que representa a atualização da rede
  *        404:
- *          description: Perfil não encontrado
+ *          description: rede não encontrada
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
 router.put('/:id', security.verifyJWT,function (req, res) {
-    models.Perfil.findById(req.params.id)
-    .then(perfil => {
-        if (!perfil) res.status(404).send("Not Found")
+    models.Rede.findById(req.params.id)
+    .then(rede => {
+        if (!rede) res.status(404).send("Not Found")
 
-        perfil.updateAttributes(req.body)
+        rede.updateAttributes(req.body)
 
-        res.status(200).send(perfil)
+        res.status(200).send(rede)
 
     })
     .catch(err => {

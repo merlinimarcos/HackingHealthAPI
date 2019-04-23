@@ -7,6 +7,7 @@ module.exports = {
         autoIncrement: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'Pessoas',
           key: 'id',

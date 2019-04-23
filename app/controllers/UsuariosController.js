@@ -1,26 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
-
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
 const models = require('../models');
+const bcrypt = require('bcrypt');
 
 // Criar um novo usuario
 router.post('/', function (req, res) {
+    let hash = bcrypt.hashSync(req.body.senha, 10);
+
     models.Usuario.create({
+            id: req.body.id,
             login : req.body.login,
-            senha: req.body.senha          
+            senha: hash,
+            id_rede: req.body.id_rede,
+            id_instituicao: req.body.id_instituicao,
+            data_ult_acesso: null           
         })
         .then(usuario => {
-            usuario.setPessoa(req.body.pessoa)
-            usuario.addPerfil(req.body.perfis)
+            //usuario.setPessoa(req.body.pessoa)
+            //usuario.addPerfil(req.body.perfis)
             res.status(200).send(usuario)
           }
         )
         .catch(err => {
           console.log(err)
-          res.status(500).send("Houve um problema ao adicionar os dados no banco de dados.")}
+          res.status(500).send({error: err})}
         )
 })
 
@@ -32,7 +35,7 @@ router.get('/', function (req, res) {
         }]
       })
     .then(usuarios => res.status(200).send(usuarios))
-    .catch(err => res.status(500).send("Existe um problema para buscar os usuarios."))
+    .catch(err => res.status(500).send({error: err}))
 })
 
 // Buscar um único usuário na base de dados
@@ -49,7 +52,7 @@ router.get('/:id', function (req, res) {
         res.status(200).send(usuario)
       }
     )
-    .catch(err => res.status(500).send("Existe um problema ao buscar o usuario."))
+    .catch(err => res.status(500).send({error: err}))
 });
 
 // Excluir um usuario
@@ -65,9 +68,9 @@ router.delete('/:id', function (req, res) {
       .then(usuario => {
         res.status(200).send("Usuário: "+ usuarioExcluido.login +" foi excluído.")
       })
-      .catch(err => res.status(500).send("Houve um problema ao excluir o usuário"))
+      .catch(err => res.status(500).send({error: err}))
     })
-    .catch(err => res.status(500).send("Existe um problema ao buscar o usuário."))
+    .catch(err => res.status(500).send({error: err}))
 });
 
 // Atualizar um único usuário
@@ -86,7 +89,7 @@ router.put('/:id', function (req, res) {
     })
     .catch(err => {
       console.log(err)
-      res.status(500).send("Houve um problema ao atualizar o usuário.")
+      res.status(500).send({error: err})
     })
 });
 
