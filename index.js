@@ -19,13 +19,15 @@ var PessoasSitClinicasController = require('./app/controllers/PessoasSitClinicas
 var PessoasTelefonesController = require('./app/controllers/PessoasTelefonesController')
 var PessoasTransportesController = require('./app/controllers/PessoasTransportesController')
 var RedesController = require('./app/controllers/RedesController')
+var RPCSolicitacaoMaterialController = require('./app/controllers/RPCSolicitacaoMaterialController')
+var RPCSolicitacaoProfissionalController = require('./app/controllers/RPCSolicitacaoProfissionalController')
 
 
 var UsuariosController = require('./app/controllers/UsuariosController')
 
 var ModeloProcessosController = require('./app/controllers/ModeloProcessosController')
 var ProcessosController = require('./app/controllers/ProcessosController')
-var RPCSolicitacaoProfissionalController = require('./app/controllers/RPCSolicitacaoProfissionalController')
+
 var LoginController = require('./app/controllers/LoginController')
 
 
@@ -74,13 +76,14 @@ app.use('/pessoas-sit-clinicas', PessoasSitClinicasController);
 app.use('/pessoas-telefones', PessoasTelefonesController);
 app.use('/pessoas-transportes', PessoasTransportesController);
 app.use('/redes', RedesController);
+app.use('/solicitacao-material', RPCSolicitacaoMaterialController)
+app.use('/solicitacao-profissional', RPCSolicitacaoProfissionalController);
 
 
 
 app.use('/usuarios', UsuariosController);
 app.use('/modeloprocessos', ModeloProcessosController);
 app.use('/processos', ProcessosController);
-app.use('/rpc-solicitacoes-profissional', RPCSolicitacaoProfissionalController);
 app.use('/login', LoginController);
 
 
