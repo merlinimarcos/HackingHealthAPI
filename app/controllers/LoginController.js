@@ -25,22 +25,22 @@ var jwt = require('jsonwebtoken');
  *      responses:
  *        200:
  *          description: Objeto JSON com Token JWT
- *        403: 
+ *        403:
  *          description: Login inválido
  *        500:
  *          description: Erro que não foi recuperar dados
  */
 router.post('/', function (req, resp) {
     models.Usuario.findOne({ where : {
-            login : req.body.login,              
+            login : req.body.login,
         }})
         .then(usuario => {
             if (!usuario || !bcrypt.compareSync(req.body.senha, usuario.senha))
                 resp.status(403).send({ error: "Login inválido!" });
-            
-            const id = usuario.id; 
+
+            const id = usuario.id;
             var token = jwt.sign({ id }, process.env.SECRET, {
-            expiresIn: 1200 
+            expiresIn: 5000 
         });
 
         resp.status(200).send({ auth: true, token: token });

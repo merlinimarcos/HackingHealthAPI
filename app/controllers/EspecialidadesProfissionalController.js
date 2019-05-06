@@ -38,11 +38,11 @@ router.post('/', security.verifyJWT, function (req, res) {
  *         type: integer
  *       descricao:
  *         type: string
- *       createdAt: 
+ *       createdAt:
  *         type: date
- *       updatedAt: 
+ *       updatedAt:
  *         type: date
- * 
+ *
  * /especialidades-profissional:
  *    get:
  *      description: Retorna todas as especialidades de profissionais de saúde cadastradas
@@ -57,7 +57,7 @@ router.post('/', security.verifyJWT, function (req, res) {
  *          description: Erro que não foi possível recuperar as especialidades
  */
 router.get('/', security.verifyJWT, function (req, res) {
-    models.EspecialidadeProfissional.findAll()
+    models.EspecialidadeProfissional.findAll({order: [["descricao", "ASC"]]})
     .then(especialidades => res.status(200).send(especialidades))
     .catch(err => res.status(500).send({error: err}))
 })

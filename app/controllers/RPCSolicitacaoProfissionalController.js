@@ -13,18 +13,31 @@ router.post('/', security.verifyJWT, function (req, res) {
 
     models.Solicitacao.create(data)
     .then(solicitacao => {
+        let dataNecessidadeSplit = req.body.dt_necessidade.split("/");
+        let dataNecessidade = dataNecessidadeSplit[2]+'-'+dataNecessidadeSplit[1]+'-'+dataNecessidadeSplit[0];
+        
         let data = {
           id: solicitacao.id,
           id_tipo_acao: req.body.id_tipo_acao,
           id_especialidade: req.body.id_especialidade,
           outra_especialidade: req.body.outra_especialidade,
           outra_acao: req.body.outra_acao,
-          dt_necessidade: req.body.dt_necessidade,
+          dt_necessidade: dataNecessidade,
           custo_estimado: req.body.custo_estimado
         }
 
         models.SolicitacaoProfissional.create(data)
-        .then(solicitacaoProfissional => res.status(200).send(solicitacaoProfissional))
+        .then(solicitacaoProfissional => {
+          let data = {
+            id_solicitacao: solicitacaoProfissional.id,
+            id_status: 1,
+            id_usuario: req.userId,
+            feedback: "",
+            data_status: new Date().toISOString()
+          }
+          models.StatusAtualSolicitacao.create(data)
+          res.status(200).send(solicitacaoProfissional)
+        })
         .catch(err => res.status(500).send({error: err}))
     }).catch(err => res.status(500).send({error: err}))
 })

@@ -1,3 +1,4 @@
+const security = require('../helpers/security')
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -27,7 +28,7 @@ const models = require('../models');
  *          required: true
  *          type: string
  *        - name: cep
- *          description: CEP 
+ *          description: CEP
  *          in: formData
  *          required: true
  *          type: string
@@ -82,7 +83,7 @@ const models = require('../models');
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
-router.post('/', function (req, res) {
+router.post('/', security.verifyJWT, function (req, res) {
     models.Pessoa.create({
           nome: req.body.nome,
           endereco: req.body.endereco,
@@ -97,14 +98,14 @@ router.post('/', function (req, res) {
         })
         .then(pessoa => {
           if (req.body.hasOwnProperty('usuario')) {
-            let hash = bcrypt.hashSync(req.body.usuario.senha, 10)          
+            let hash = bcrypt.hashSync(req.body.usuario.senha, 10)
             pessoa.createUsuario({
               id: pessoa.id,
               login : req.body.usuario.login,
               senha: hash,
               id_rede: req.body.usuario.id_rede,
               id_instituicao: req.body.usuario.id_instituicao,
-              data_ult_acesso: null           
+              data_ult_acesso: null
           }).catch(err => res.status(500).send(err))
           }
           if (req.body.hasOwnProperty('pessoaFisica'))
@@ -133,7 +134,7 @@ router.post('/', function (req, res) {
  *       endereco:
  *         type: string
  *       email:
- *         type: string 
+ *         type: string
  *       cep:
  *         type: string
  *       cidade:
@@ -153,12 +154,12 @@ router.post('/', function (req, res) {
  *       PessoaFisica:
  *         type: Json
  *       PessoaJuridica:
- *         type: Json 
- *       createdAt: 
+ *         type: Json
+ *       createdAt:
  *         type: date
- *       updatedAt: 
- *         type: date    
- * 
+ *       updatedAt:
+ *         type: date
+ *
  * /pessoas:
  *    get:
  *      description: Retorna todas as pessoas cadastradas
@@ -172,7 +173,7 @@ router.post('/', function (req, res) {
  *        500:
  *          description: Erro que não foi possível recuperar as pessoas
  */
-router.get('/', function (req, res) {
+router.get('/', security.verifyJWT, function (req, res) {
     models.Pessoa.findAll({include: [
       {model: models.Usuario, required: false, attributes: ["login","id_rede", "id_instituicao"] },
       {model: models.PessoaFisica, required: false },
@@ -197,7 +198,7 @@ router.get('/', function (req, res) {
  *        500:
  *          description: Erro que não foi possível buscar a pessoa
  */
-router.get('/:id', function (req, res) {
+router.get('/:id', security.verifyJWT, function (req, res) {
     models.Pessoa.findById(req.params.id, {include: [
       {model: models.Usuario, required: false, attributes: ["login","id_rede", "id_instituicao"] },
       {model: models.PessoaFisica, required: false },
@@ -227,7 +228,7 @@ router.get('/:id', function (req, res) {
  *        500:
  *          description: Erro que não foi possível excluir a pessoa
  */
-router.delete('/:id', function (req, res) {
+router.delete('/:id', security.verifyJWT, function (req, res) {
     models.Pessoa.findById(req.params.id)
     .then(pessoa => {
       if (!pessoa) res.status(404).send("Not Found.")
@@ -267,7 +268,7 @@ router.delete('/:id', function (req, res) {
  *          required: true
  *          type: string
  *        - name: cep
- *          description: CEP 
+ *          description: CEP
  *          in: formData
  *          required: true
  *          type: string
@@ -324,7 +325,7 @@ router.delete('/:id', function (req, res) {
  *        500:
  *          description: Erro que não foi possível salvar os dados
  */
-router.put('/:id', function (req, res) {
+router.put('/:id', security.verifyJWT, function (req, res) {
     models.Pessoa.findById(req.params.id)
     .then(pessoa => {
         if (!pessoa) res.status(404).send("Not Found.")
@@ -341,7 +342,7 @@ router.put('/:id', function (req, res) {
           end_numero: req.body.end_numero,
           end_complemento: req.body.end_complemento,
         })
-        
+
         if (req.body.hasOwnProperty('pessoaJuridica'))
           pessoa.getPessoaJuridica()
             .then(pessoaJuridica => pessoaJuridica.updateAttributes(req.body.pessoaJuridica))
@@ -350,13 +351,13 @@ router.put('/:id', function (req, res) {
           pessoa.getPessoaFisica()
             .then(pessoaFisica => pessoaFisica.updateAttributes(req.body.pessoaFisica))
 
-        if (req.body.hasOwnProperty('usuario')) {          
+        if (req.body.hasOwnProperty('usuario')) {
           pessoa.getUsuario()
             .then(usuario => usuario.updateAttributes({
               id: pessoa.id,
-              login : req.body.usuario.login,              
+              login : req.body.usuario.login,
               id_rede: req.body.usuario.id_rede,
-              id_instituicao: req.body.usuario.id_instituicao,              
+              id_instituicao: req.body.usuario.id_instituicao,
           }))
         }
 

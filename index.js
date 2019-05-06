@@ -6,6 +6,7 @@ const httpProxy = require('express-http-proxy')
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const helmet = require('helmet');
+var cors = require('cors')
 require("dotenv-safe").load();
 
 var EspecialidadesProfissionalController = require('./app/controllers/EspecialidadesProfissionalController')
@@ -19,29 +20,33 @@ var PessoasSitClinicasController = require('./app/controllers/PessoasSitClinicas
 var PessoasTelefonesController = require('./app/controllers/PessoasTelefonesController')
 var PessoasTransportesController = require('./app/controllers/PessoasTransportesController')
 var RedesController = require('./app/controllers/RedesController')
+
+var RPCSolicitacaoAtendimentoCriancaController = require('./app/controllers/RPCSolicitacaoAtendimentoCriancaController')
 var RPCSolicitacaoMaterialController = require('./app/controllers/RPCSolicitacaoMaterialController')
 var RPCSolicitacaoProfissionalController = require('./app/controllers/RPCSolicitacaoProfissionalController')
-
-
-var UsuariosController = require('./app/controllers/UsuariosController')
+var RPCMudarStatusSolicitacaoController = require('./app/controllers/RPCMudarStatusSolicitacaoController')
+var SolicitacaoMaterialItensController = require('./app/controllers/SolicitacaoMaterialItensController')
+var TipoAcoesProfissionaisController = require('./app/controllers/TipoAcoesProfissionaisController')
+var UnidadesMateriaisController = require('./app/controllers/UnidadesMateriaisController')
+var UsuariosPerfisController = require('./app/controllers/UsuariosPerfisController')
 
 var ModeloProcessosController = require('./app/controllers/ModeloProcessosController')
 var ProcessosController = require('./app/controllers/ProcessosController')
 
 var LoginController = require('./app/controllers/LoginController')
-
+var SolicitacoesSolicitanteController = require('./app/controllers/SolicitacoesSolicitanteController')
 
 
 var swaggerUi = require('swagger-ui-express');
 var swaggerJSDoc = require("swagger-jsdoc");
 
-
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(logger('dev'));
 app.use(helmet());;
 app.use(cookieParser());
-
+app.options('*', cors())
 
 
 var swaggerDefinition = {
@@ -76,16 +81,17 @@ app.use('/pessoas-sit-clinicas', PessoasSitClinicasController);
 app.use('/pessoas-telefones', PessoasTelefonesController);
 app.use('/pessoas-transportes', PessoasTransportesController);
 app.use('/redes', RedesController);
+app.use('/solicitacao-atendimento-crianca', RPCSolicitacaoAtendimentoCriancaController);
 app.use('/solicitacao-material', RPCSolicitacaoMaterialController)
 app.use('/solicitacao-profissional', RPCSolicitacaoProfissionalController);
-
-
-
-app.use('/usuarios', UsuariosController);
+app.use('/mudar-status-solicitacao', RPCMudarStatusSolicitacaoController)
+app.use('/solicitacao-material-item',  SolicitacaoMaterialItensController);
+app.use('/tipos-acoes-profissionais',  TipoAcoesProfissionaisController);
+app.use('/unidades-materiais',  UnidadesMateriaisController);
+app.use('/usuarios-perfis', UsuariosPerfisController);
 app.use('/modeloprocessos', ModeloProcessosController);
 app.use('/processos', ProcessosController);
 app.use('/login', LoginController);
+app.use('/solicitacoes-solicitante', SolicitacoesSolicitanteController);
 
-
-
-app.listen(3000)
+app.listen(8080)

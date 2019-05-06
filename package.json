@@ -16,6 +16,7 @@
     "bpmn-engine": "^4.2.0",
     "camunda-bpmn-moddle": "^3.2.0",
     "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "dotenv-safe": "^6.1.0",
     "express": "^4.16.4",
     "express-http-proxy": "^1.5.1",

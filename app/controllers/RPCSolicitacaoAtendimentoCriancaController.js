@@ -6,7 +6,7 @@ const security = require('../helpers/security')
 router.post('/', security.verifyJWT, function (req, res) {
     let data = {
       descricao: req.body.descricao,
-      tipo_solicitacao: 2,
+      tipo_solicitacao: 1,
       id_usuario: req.userId,
       dt_solicitacao: new Date().toISOString()
     }
@@ -15,21 +15,20 @@ router.post('/', security.verifyJWT, function (req, res) {
     .then(solicitacao => {
         let data = {
           id: solicitacao.id,
-          prestacao_de_contas: req.body.prestacao_de_contas,
-          dt_prestacao_contas: req.body.dt_prestacao_contas
+          id_pessoa: req.body.id_pessoa
         }
 
-        models.SolicitacaoMaterial.create(data)
-        .then(solicitacaoMaterial => {
+        models.SolicitacaoAtendimentoCrianca.create(data)
+        .then(solicitacaoAtendimentoCrianca => {
           let data = {
-            id_solicitacao: solicitacaoMaterial.id,
+            id_solicitacao: solicitacaoAtendimentoCrianca.id,
             id_status: 1,
             id_usuario: req.userId,
             feedback: "",
             data_status: new Date().toISOString()
           }
           models.StatusAtualSolicitacao.create(data)
-          res.status(200).send(solicitacaoMaterial)
+          res.status(200).send(solicitacaoAtendimentoCrianca)
         })
         .catch(err => res.status(500).send({error: err}))
     }).catch(err => res.status(500).send({error: err}))
@@ -37,7 +36,7 @@ router.post('/', security.verifyJWT, function (req, res) {
 
 
 router.get('/', function (req, res) {
-    models.SolicitacaoMaterial.findAll({include: [{
+    models.SolicitacaoAtendimentoCrianca.findAll({include: [{
       model: models.Solicitacao,
       include: [{
           model: models.Usuario,
@@ -46,12 +45,12 @@ router.get('/', function (req, res) {
         model: models.TipoSolicitacao
       }]
     }]})
-    .then(solicitacaoMaterial => res.status(200).send(solicitacaoMaterial))
+    .then(solicitacaoAtendimentoCrianca => res.status(200).send(solicitacaoAtendimentoCrianca))
     .catch(err => res.status(500).send(err))
 })
 
 router.get('/:id', function (req, res) {
-    models.SolicitacaoMaterial.findById(req.params.id, {include: [{
+    models.solicitacaoAtendimentoCrianca.findById(req.params.id, {include: [{
       model: models.Solicitacao,
       include: [{
           model: models.Usuario,
@@ -60,24 +59,24 @@ router.get('/:id', function (req, res) {
         model: models.TipoSolicitacao
       }]
     }]})
-    .then(solicitacaoMaterial =>
+    .then(solicitacaoAtendimentoCrianca =>
       {
-        if (!solicitacaoMaterial) res.status(404).send("Not Found");
-        res.status(200).send(solicitacaoMaterial)
+        if (!solicitacaoAtendimentoCrianca) res.status(404).send("Not Found");
+        res.status(200).send(solicitacaoAtendimentoCrianca)
       }
     )
     .catch(err => res.status(500).send({error: err}))
 });
 
 router.delete('/:id', function (req, res) {
-    models.SolicitacaoMaterial.findById(req.params.id)
-    .then(solicitacaoMaterial => {
-      if (!solicitacaoMaterial) res.status(404).send("Not Found")
+    models.SolicitacaoAtendimentoCrianca.findById(req.params.id)
+    .then(solicitacaoAtendimentoCrianca => {
+      if (!solicitacaoAtendimentoCrianca) res.status(404).send("Not Found")
 
-      models.SolicitacaoMaterial.destroy({
+      models.SolicitacaoAtendimentoCrianca.destroy({
         where: { id: req.params.id }
       })
-      .then(solicitacaoMaterial => {
+      .then(solicitacaoAtendimentoCrianca => {
         res.status(200).send({success: true})
       })
       .catch(err => res.status(500).send({error: err}))
@@ -97,18 +96,17 @@ router.put('/:id', function (req, res) {
 
       solicitacao.updateAttributes(data)
 
-      models.SolicitacaoMaterial.findById(req.params.id)
-      .then(solicitacaoMaterial => {
+      models.solicitacaoAtendimentoCrianca.findById(req.params.id)
+      .then(solicitacaoAtendimentoCrianca => {
 
-        if (!solicitacaoMaterial) res.status(404).send("Not Found")
+        if (!solicitacaoAtendimentoCrianca) res.status(404).send("Not Found")
 
         let data = {
           id: solicitacao.id,
-          prestacao_de_contas: req.body.prestacao_de_contas,
-          dt_prestacao_contas: req.body.dt_prestacao_contas
+          id_pessoa: req.body.id_pessoa
         }
-        solicitacaoMaterial.updateAttributes(data)
-        res.status(200).send(solicitacaoMaterial)
+        solicitacaoAtendimentoCrianca.updateAttributes(data)
+        res.status(200).send(solicitacaoAtendimentoCrianca)
       })
       .catch(err => res.status(500).send({error: err}))
   }).catch(err => res.status(500).send({error: err}))
