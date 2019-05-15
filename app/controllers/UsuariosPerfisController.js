@@ -25,7 +25,7 @@ router.get('/', security.verifyJWT,function (req, res) {
           model: models.Perfil,
         }]
       })
-    .then(usuarios => res.status(200).send(usuarios))
+    .then(usuario => res.status(200).send(usuario))
     .catch(err => res.status(500).send({error: err}))
 })
 

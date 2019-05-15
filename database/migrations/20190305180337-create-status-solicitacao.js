@@ -8,6 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id_perfil: {
+        allowNull: false,
+        primaryKey: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Perfis',
+          key: 'id',
+       }
+      },
       descricao: {
         type: Sequelize.STRING
       },

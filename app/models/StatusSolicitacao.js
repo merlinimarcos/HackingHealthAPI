@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const StatusSolicitacao = sequelize.define('StatusSolicitacao', {
-    descricao: DataTypes.STRING
+    descricao: DataTypes.STRING,
+    id_perfil: DataTypes.INTEGER
   }, {
     freezeTableName: true,
     tableName: 'StatusSolicitacao'
