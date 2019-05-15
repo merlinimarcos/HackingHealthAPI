@@ -29,12 +29,12 @@ module.exports = {
             updatedAt: '2019-01-01 00:00:00'
         }, {
             id_usuario: 7,
-            id_perfil: 5,
+            id_perfil: 4,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
             id_usuario: 8,
-            id_perfil: 6,
+            id_perfil: 5,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }], {});

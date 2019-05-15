@@ -6,7 +6,6 @@ const security = require('../helpers/security')
 router.get('/', security.verifyJWT, function (req, res) {
     models.Solicitacao.findAll({include: [{
       model: models.StatusAtualSolicitacao,
-      order: ["id", "DESC"],
       include: [{
           model: models.StatusSolicitacao
       }]
@@ -16,7 +15,10 @@ router.get('/', security.verifyJWT, function (req, res) {
         model: models.Usuario,
         attributes: ["login","id_rede", "id_instituicao"],
         where: {id: req.userId}
-    }]})
+    }],
+    order: [[models.StatusAtualSolicitacao, "id", "DESC"]]
+  }
+)
     .then(solicitacoes => res.status(200).send(solicitacoes))
     .catch(err => res.status(500).send(err))
 })

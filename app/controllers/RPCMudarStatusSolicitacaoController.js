@@ -25,7 +25,7 @@ const models = require('../models');
  *          description: Feedback
  *          in: formData
  *          required: true
- *          type: integer
+ *          type: string
  *      responses:
  *        200:
  *          description: Objeto JSON que representa a nova especialidade
@@ -41,7 +41,7 @@ router.post('/', security.verifyJWT, function (req, res) {
       feedback: req.body.feedback,
       data_status: new Date().toISOString()
     }
-    models.StatusAtualSolicitacao.create(req.body)
+    models.StatusAtualSolicitacao.create(data)
         .then(statusAtualSolicitacao => res.status(200).send(statusAtualSolicitacao))
         .catch(err => res.status(500).send({error: err}))
 })

@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   Solicitacao.associate = function(models) {
     Solicitacao.belongsTo(models.Usuario, { foreignKey: 'id_usuario' })
     Solicitacao.belongsTo(models.TipoSolicitacao, { foreignKey: 'tipo_solicitacao' })
-    Solicitacao.hasMany(models.StatusAtualSolicitacao, { foreignKey: 'id_solicitacao' })    
+    Solicitacao.hasMany(models.StatusAtualSolicitacao, { foreignKey: 'id_solicitacao' })
+    Solicitacao.hasOne(models.SolicitacaoProfissional, { foreignKey: 'id' })    
   };
   return Solicitacao;
 };

@@ -13,7 +13,7 @@ router.get('/', security.verifyJWT, function (req, res) {
         }]
       })
     .then(usuario => {
-      
+
         if (usuario.hasOwnProperty('Perfils')) {
             let id_perfil = usuario.Perfils[0].id;
 
@@ -22,19 +22,56 @@ router.get('/', security.verifyJWT, function (req, res) {
                 order: ["id", "DESC"],
                 include: [{
                     model: models.StatusSolicitacao
+                }, {
+                  model: models.Usuario,
+                  attributes: ["login","id_rede", "id_instituicao"],
+                  include: [{
+                    model: models.Pessoa
+                  }, {
+                    model: models.Rede
+                  }, {
+                    model: models.Perfil
+                  }, {
+                    model: models.PessoaJuridica,
+                    include: [{
+                      model: models.Pessoa
+                    }]
+                  }]
                 }]
               }, {
+                model: models.SolicitacaoProfissional,
+                include: [{
+                  model: models.EspecialidadeProfissional
+                }, {
+                  model: models.TipoDeAcaoProfissional
+                }]
+              },{
                 model: models.TipoSolicitacao
               }, {
                   model: models.Usuario,
                   attributes: ["login","id_rede", "id_instituicao"],
-              }]})
+                  include: [{
+                    model: models.Pessoa
+                  }, {
+                    model: models.Rede
+                  }, {
+                    model: models.Perfil
+                  }, {
+                    model: models.PessoaJuridica,
+                    include: [{
+                      model: models.Pessoa
+                    }]
+                  }]
+              }],
+              order: [[models.StatusAtualSolicitacao, "id", "DESC"]]
+            })
               .then(solicitacoes => {
                    let result = [];
 
                    solicitacoes.map(s => {
+
                       if (s.StatusAtualSolicitacaos[0].StatusSolicitacao.id_perfil == id_perfil)
-                        result.push(s)    
+                        result.push(s)
                    })
 
                   res.status(200).send(result)
