@@ -70,8 +70,15 @@ router.get('/', security.verifyJWT, function (req, res) {
 
                    solicitacoes.map(s => {
 
-                      if (s.StatusAtualSolicitacaos[0].StatusSolicitacao.id_perfil == id_perfil)
-                        result.push(s)
+                      if (s.StatusAtualSolicitacaos[0].StatusSolicitacao.id_perfil == id_perfil) {
+                        id_status = s.StatusAtualSolicitacaos[0].StatusSolicitacao.id
+                        if (id_status === 4 || id_status === 7 || id_status === 10) {                          
+                          if (s.StatusAtualSolicitacaos[0].id_usuario == req.userId)
+                            result.push(s)
+                        } else {
+                          result.push(s)
+                        }
+                      }
                    })
 
                   res.status(200).send(result)

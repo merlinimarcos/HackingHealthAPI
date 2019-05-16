@@ -24,7 +24,7 @@ module.exports = {
             updatedAt: '2019-01-01 00:00:00'
         }, {
             descricao: 'Shriner Local - Resolvido',
-            id_perfil: 4,
+            id_perfil: 2,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
@@ -39,7 +39,7 @@ module.exports = {
             updatedAt: '2019-01-01 00:00:00'
         }, {
             descricao: 'Shriner Regional - Resolvido',
-            id_perfil: 5,
+            id_perfil: 2,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
@@ -54,7 +54,7 @@ module.exports = {
             updatedAt: '2019-01-01 00:00:00'
         }, {
             descricao: 'Shriner Nacional - Resolvido',
-            id_perfil: 6,
+            id_perfil: 2,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }    ], {});

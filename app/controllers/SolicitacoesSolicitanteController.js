@@ -15,6 +15,13 @@ router.get('/', security.verifyJWT, function (req, res) {
         model: models.Usuario,
         attributes: ["login","id_rede", "id_instituicao"],
         where: {id: req.userId}
+    }, {
+      model: models.SolicitacaoProfissional,
+      include: [{
+        model: models.EspecialidadeProfissional
+      }, {
+        model: models.TipoDeAcaoProfissional
+      }]
     }],
     order: [[models.StatusAtualSolicitacao, "id", "DESC"]]
   }
