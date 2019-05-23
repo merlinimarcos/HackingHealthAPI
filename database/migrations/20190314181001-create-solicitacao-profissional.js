@@ -12,38 +12,24 @@ module.exports = {
           key: 'id',
        }
       },
-      id_tipo_acao: {
-        allowNull: false,
-        autoIncrement: false,
-        primaryKey: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'TiposDeAcaoProfissional',
-          key: 'id',
-       }
-      },
-      id_especialidade: {
-        allowNull: false,
-        autoIncrement: false,
-        primaryKey: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'EspecialidadesProfissional',
-          key: 'id',
-       }
-      },
-      outra_especialidade: {
-        type: Sequelize.STRING
+      outra_especialidade: { 
+        type: Sequelize.TEXT
       },
       outra_acao: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },    
+      data_inicial_periodo_necessidade: {
+        type: Sequelize.DATE
       },
-      dt_necessidade: {
+      data_final_periodo_necessidade: {
         type: Sequelize.DATE
       },
       custo_estimado: {
         type: Sequelize.DECIMAL(10, 2)
       },
+      justificativa_valor: {
+        type: Sequelize.TEXT
+      },      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

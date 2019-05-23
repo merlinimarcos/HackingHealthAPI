@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'TiposDeAcaoProfissional'
   });
   TipoDeAcaoProfissional.associate = function(models) {
-    // associations can be defined here
+    TipoDeAcaoProfissional.belongsToMany(models.SolicitacaoProfissional, { through: models.SolicitacaoProfissionalAcoes, foreignKey: 'id_acao'});
   };
   return TipoDeAcaoProfissional;
 };

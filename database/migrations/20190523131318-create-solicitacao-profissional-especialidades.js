@@ -1,36 +1,30 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Solicitacoes', {
+    return queryInterface.createTable('SolicitacaoProfissionalEspecialidades', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_usuario: {
+      id_solicitacao: {
         allowNull: false,
         primaryKey: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Usuarios',
+          model: 'SolicitacaoProfissional',
           key: 'id',
         }
       },
-      tipo_solicitacao: {
-          allowNull: false,
-          primaryKey: false,
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'TiposSolicitacoes',
-            key: 'id',
+      id_especialidade: {
+        allowNull: false,
+        primaryKey: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'EspecialidadesProfissional',
+          key: 'id',
         }
-      },
-      descricao: {
-        type: Sequelize.TEXT
-      },
-      dt_solicitacao: {
-        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +37,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Solicitacoes');
+    return queryInterface.dropTable('SolicitacaoProfissionalEspecialidades');
   }
 };

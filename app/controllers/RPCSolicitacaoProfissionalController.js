@@ -13,19 +13,21 @@ router.post('/', security.verifyJWT, function (req, res) {
 
     models.Solicitacao.create(data)
     .then(solicitacao => {
-        let dataNecessidadeSplit = req.body.dt_necessidade.split("/");
-        let dataNecessidade = dataNecessidadeSplit[2]+'-'+dataNecessidadeSplit[1]+'-'+dataNecessidadeSplit[0];
+        let dataNecessidadeInicioSplit = req.body.data_final_periodo_necessidade.split("/");
+        let dataNecessidadeInicio = dataNecessidadeInicioSplit[2]+'-'+dataNecessidadeInicioSplit[1]+'-'+dataNecessidadeInicioSplit[0];
+        let dataNecessidadeFinalSplit = req.body.data_final_periodo_necessidade.split("/");
+        let dataNecessidadeFinal = dataNecessidadeFinalSplit[2]+'-'+dataNecessidadeFinalSplit[1]+'-'+dataNecessidadeFinalSplit[0];
         
         let data = {
-          id: solicitacao.id,
-          id_tipo_acao: req.body.id_tipo_acao,
-          id_especialidade: req.body.id_especialidade,
+          id: solicitacao.id,           
           outra_especialidade: req.body.outra_especialidade,
           outra_acao: req.body.outra_acao,
-          dt_necessidade: dataNecessidade,
-          custo_estimado: req.body.custo_estimado
+          data_inicial_periodo_necessidade: dataNecessidadeInicio,
+          data_final_periodo_necessidade: dataNecessidadeFinal,
+          custo_estimado: req.body.custo_estimado,
+          justificativa_valor: req.body.justificativa_valor          
         }
-
+        
         models.SolicitacaoProfissional.create(data)
         .then(solicitacaoProfissional => {
           let data = {
@@ -36,6 +38,19 @@ router.post('/', security.verifyJWT, function (req, res) {
             data_status: new Date().toISOString()
           }
           models.StatusAtualSolicitacao.create(data)
+
+          let id_especialidade = req.body.id_especialidade;
+          let id_tipo_acao = req.body.id_tipo_acao;
+
+          id_especialidade.map( e => {
+            models.SolicitacaoProfissionalEspecialidades.create({id_solicitacao: solicitacaoProfissional.id, id_especialidade: e})
+          })
+
+          id_tipo_acao.map( a => {
+            models.SolicitacaoProfissionalAcoes.create({id_solicitacao: solicitacaoProfissional.id, id_acao: a})
+          })
+          
+          
           res.status(200).send(solicitacaoProfissional)
         })
         .catch(err => res.status(500).send({error: err}))
