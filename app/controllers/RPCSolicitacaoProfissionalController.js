@@ -2,8 +2,23 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const security = require('../helpers/security')
+const { check, validationResult } = require('express-validator/check');
+const validators = [
+  check('descricao').isLength({ min: 1 }).withMessage('Campo Justificativa é obrigatório'),
+  check('data_inicial_periodo_necessidade').custom(isValidDate).withMessage('Data inicial período de necessidade inválida'),
+  check('data_final_periodo_necessidade').custom(isValidDate).withMessage('Data final período de necessidade inválida'),
+  check('custo_estimado').optional().isDecimal().withMessage('O custo estimado deve ser um valor decimal'),
+  check('id_especialidade').not().isEmpty().withMessage("Selecione ao menos uma especialidade"),
+  check('id_tipo_acao').not().isEmpty().withMessage("Selecione ao menos um tipo de ação")
+] 
 
-router.post('/', security.verifyJWT, function (req, res) {
+
+router.post('/', validators, security.verifyJWT, function (req, res) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     
     let data = {
       descricao: req.body.descricao,
@@ -115,7 +130,12 @@ router.delete('/:id', function (req, res) {
     .catch(err => res.status(500).send({error: err}))
 });
 
-router.put('/:id', function (req, res) {
+router.put('/:id', validators,function (req, res) {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
 
   models.Solicitacao.findById(req.params.id)
   .then(solicitacao => {
@@ -157,5 +177,26 @@ router.put('/:id', function (req, res) {
       .catch(err => res.status(500).send({error: err}))
   }).catch(err => res.status(500).send({error: err}))
 });
+
+function isValidDate(dateString)
+{
+    if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString))
+        return false;
+
+    var parts = dateString.split("/");
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
+    var year = parseInt(parts[2], 10);
+
+    if(year < 1000 || year > 3000 || month == 0 || month > 12)
+        return false;
+
+    var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+    if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+        monthLength[1] = 29;
+
+    return day > 0 && day <= monthLength[month - 1];
+};
 
 module.exports = router;

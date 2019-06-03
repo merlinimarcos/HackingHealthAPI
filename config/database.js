@@ -3,21 +3,21 @@ module.exports = {
       "username": "postgres",
       "password": "root",
       "database": "hackinghealth_development",
-      "host": "127.0.0.1",
+      "host": "172.21.0.2",
       "dialect": "postgres"
     },
     "test": {
       "username": "postgres",
       "password": "root",
       "database": "hackinghealth_test",
-      "host": "127.0.0.1",
+      "host": "172.17.0.2",
       "dialect": "postgres"
     },
     "production": {
       "username": "postgres",
       "password": "root",
       "database": "hackinghealth_production",
-      "host": "127.0.0.1",
+      "host": "172.17.0.2",
       "dialect": "postgres"
     }
 }
