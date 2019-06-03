@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     estado_civil: DataTypes.STRING,
     end_numero: DataTypes.INTEGER,
     end_complemento: DataTypes.STRING,
-    rua: DataTypes.STRING
+    rua: DataTypes.STRING,
+    telefone: DataTypes.STRING
   }, {
     freezeTableName: true,
     tableName: 'Pessoas'

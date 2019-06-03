@@ -4,6 +4,7 @@ const models = require('../models');
 const security = require('../helpers/security')
 
 router.post('/', security.verifyJWT, function (req, res) {
+    
     let data = {
       descricao: req.body.descricao,
       tipo_solicitacao: 3,
@@ -12,8 +13,8 @@ router.post('/', security.verifyJWT, function (req, res) {
     }
 
     models.Solicitacao.create(data)
-    .then(solicitacao => {
-        let dataNecessidadeInicioSplit = req.body.data_final_periodo_necessidade.split("/");
+    .then(solicitacao => {        
+        let dataNecessidadeInicioSplit = req.body.data_inicial_periodo_necessidade.split("/");
         let dataNecessidadeInicio = dataNecessidadeInicioSplit[2]+'-'+dataNecessidadeInicioSplit[1]+'-'+dataNecessidadeInicioSplit[0];
         let dataNecessidadeFinalSplit = req.body.data_final_periodo_necessidade.split("/");
         let dataNecessidadeFinal = dataNecessidadeFinalSplit[2]+'-'+dataNecessidadeFinalSplit[1]+'-'+dataNecessidadeFinalSplit[0];
@@ -27,7 +28,7 @@ router.post('/', security.verifyJWT, function (req, res) {
           custo_estimado: req.body.custo_estimado,
           justificativa_valor: req.body.justificativa_valor          
         }
-        
+
         models.SolicitacaoProfissional.create(data)
         .then(solicitacaoProfissional => {
           let data = {
@@ -35,7 +36,8 @@ router.post('/', security.verifyJWT, function (req, res) {
             id_status: 1,
             id_usuario: req.userId,
             feedback: "",
-            data_status: new Date().toISOString()
+            data_status: new Date().toISOString(),
+            concluido: req.body.concluido
           }
           models.StatusAtualSolicitacao.create(data)
 
@@ -130,16 +132,26 @@ router.put('/:id', function (req, res) {
 
         if (!solicitacaoProfissional) res.status(404).send("Not Found")
 
+        let dataNecessidadeInicioSplit = req.body.data_inicial_periodo_necessidade.split("/");
+        let dataNecessidadeInicio = dataNecessidadeInicioSplit[2]+'-'+dataNecessidadeInicioSplit[1]+'-'+dataNecessidadeInicioSplit[0];
+        let dataNecessidadeFinalSplit = req.body.data_final_periodo_necessidade.split("/");
+        let dataNecessidadeFinal = dataNecessidadeFinalSplit[2]+'-'+dataNecessidadeFinalSplit[1]+'-'+dataNecessidadeFinalSplit[0];
+        
         let data = {
-          id_tipo_acao: req.body.id_tipo_acao,
-          id_especialidade: req.body.id_especialidade,
+          id: solicitacao.id,           
           outra_especialidade: req.body.outra_especialidade,
           outra_acao: req.body.outra_acao,
-          dt_necessidade: req.body.dt_necessidade,
-          custo_estimado: req.body.custo_estimado
+          data_inicial_periodo_necessidade: dataNecessidadeInicio,
+          data_final_periodo_necessidade: dataNecessidadeFinal,
+          custo_estimado: req.body.custo_estimado,
+          justificativa_valor: req.body.justificativa_valor          
         }
 
         solicitacaoProfissional.updateAttributes(data)
+        models.StatusAtualSolicitacao.findOne({where: {id_solicitacao: solicitacao.id}}).then(statusSolicitacao => {
+          statusSolicitacao.updateAttributes({concluido: req.body.concluido})
+        })
+       
         res.status(200).send(solicitacaoProfissional)
       })
       .catch(err => res.status(500).send({error: err}))

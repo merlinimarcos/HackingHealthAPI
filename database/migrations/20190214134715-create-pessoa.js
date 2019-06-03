@@ -38,6 +38,9 @@ module.exports = {
       end_complemento: {
         type: Sequelize.STRING
       },
+      telefone: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

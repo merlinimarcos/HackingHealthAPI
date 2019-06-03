@@ -40,7 +40,7 @@ router.post('/', function (req, resp) {
 
             const id = usuario.id;
             var token = jwt.sign({ id }, process.env.SECRET, {
-            expiresIn: 5000 
+            expiresIn: 864000 
         });
 
         resp.status(200).send({ auth: true, token: token });

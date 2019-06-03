@@ -15,18 +15,41 @@ module.exports = {
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
-            descricao: 'Shriner Local',
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }, {
             descricao: 'Shriner Regional',
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
-            descricao: 'Nacional',
+            descricao: 'Comitê Comunitário Regional',
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
-        }, ], {});
+        }, 
+        {
+          descricao: 'SAR',
+          createdAt: '2019-01-01 00:00:00',
+          updatedAt: '2019-01-01 00:00:00'
+        }, {
+          descricao: 'Comitê Comunitário Clube',
+          createdAt: '2019-01-01 00:00:00',
+          updatedAt: '2019-01-01 00:00:00'
+        }, {
+          descricao: 'SAC',
+          createdAt: '2019-01-01 00:00:00',
+          updatedAt: '2019-01-01 00:00:00'
+      }, {
+        descricao: 'Shriner Aprovador Templo',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
+      }, {
+        descricao: 'Comitê Comunitário Templo',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
+      },
+      {
+        descricao: 'SAT',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
+      },
+      ], {});
   },
 
   down: (queryInterface, Sequelize) => {

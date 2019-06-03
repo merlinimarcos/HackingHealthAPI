@@ -68,15 +68,16 @@ router.get('/', security.verifyJWT, function (req, res) {
               .then(solicitacoes => {
                    let result = [];
 
-                   solicitacoes.map(s => {
-
+                   solicitacoes.map(s => {                      
                       if (s.StatusAtualSolicitacaos[0].StatusSolicitacao.id_perfil == id_perfil) {
                         id_status = s.StatusAtualSolicitacaos[0].StatusSolicitacao.id
-                        if (id_status === 4 || id_status === 7 || id_status === 10) {                          
-                          if (s.StatusAtualSolicitacaos[0].id_usuario == req.userId)
-                            result.push(s)
-                        } else {
-                          result.push(s)
+                                              
+                            if (s.StatusAtualSolicitacaos[0].concluido == 1)                        
+                              result.push(s)                         
+                        
+                      } else {
+                        if (s.StatusAtualSolicitacaos[0].id_usuario == req.userId) {
+                          result.push(s)                         
                         }
                       }
                    })
@@ -89,5 +90,61 @@ router.get('/', security.verifyJWT, function (req, res) {
     })
     .catch(err => res.status(500).send({error: err}))
 })
+
+
+router.get('/:id', security.verifyJWT, function (req, res) {
+  models.Solicitacao.findById(req.params.id, {include: [{
+    model: models.StatusAtualSolicitacao,
+    order: ["id", "DESC"],
+    include: [{
+        model: models.StatusSolicitacao
+    }, {
+      model: models.Usuario,
+      attributes: ["login","id_rede", "id_instituicao"],
+      include: [{
+        model: models.Pessoa
+      }, {
+        model: models.Rede
+      }, {
+        model: models.Perfil
+      }, {
+        model: models.PessoaJuridica,
+        include: [{
+          model: models.Pessoa
+        }]
+      }]
+    }]
+  }, {
+    model: models.SolicitacaoProfissional,
+    include: [{
+      model: models.EspecialidadeProfissional
+    }, {
+      model: models.TipoDeAcaoProfissional
+    }]
+  },{
+    model: models.TipoSolicitacao
+  }, {
+      model: models.Usuario,
+      attributes: ["login","id_rede", "id_instituicao"],
+      include: [{
+        model: models.Pessoa
+      }, {
+        model: models.Rede
+      }, {
+        model: models.Perfil
+      }, {
+        model: models.PessoaJuridica,
+        include: [{
+          model: models.Pessoa
+        }]
+      }]
+  }],
+  order: [[models.StatusAtualSolicitacao, "id", "DESC"]]
+})
+  .then(solicitacao => {       
+      res.status(200).send(solicitacao)
+    })
+  .catch(err => res.status(500).send(err))
+});
 
 module.exports = router;

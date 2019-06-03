@@ -3,61 +3,57 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('StatusSolicitacao', [{
-        descricao: 'Solicitado',
-        id_perfil: 3,
-        createdAt: '2019-01-01 00:00:00',
-        updatedAt: '2019-01-01 00:00:00'
+          descricao: 'Em entendimento da solicitação',
+          id_perfil: 3,
+          createdAt: '2019-01-01 00:00:00',
+          updatedAt: '2019-01-01 00:00:00'
       }, {
-          descricao: 'Triagem - Deferido',
+          descricao: 'Em Aprovação Shriner Regional',
           id_perfil: 4,
           createdAt: '2019-01-01 00:00:00',
           updatedAt: '2019-01-01 00:00:00'
-      }, {
-          descricao: 'Triagem - Indeferido',
-          id_perfil: 2,
-          createdAt: '2019-01-01 00:00:00',
-          updatedAt: '2019-01-01 00:00:00'
         }, {
-            descricao: 'Shriner Local - Em análise',
-            id_perfil: 4,
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }, {
-            descricao: 'Shriner Local - Resolvido',
-            id_perfil: 2,
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }, {
-            descricao: 'Shriner Local - Solicitado para regional',
+            descricao: 'Comitê Comunitário Regional',
             id_perfil: 5,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
-            descricao: 'Shriner Regional - Em análise',
-            id_perfil: 5,
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }, {
-            descricao: 'Shriner Regional - Resolvido',
-            id_perfil: 2,
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }, {
-            descricao: 'Shriner Reginal - Solicitado para nacional',
+            descricao: 'Parecer CCR em Análise SAR',
             id_perfil: 6,
+            createdAt: '2019-01-01 00:00:00',
+            updatedAt: '2019-01-01 00:00:00'
+        }, {
+            descricao: 'Em Análise Comitê Comunitário Clube',
+            id_perfil: 7,
+            createdAt: '2019-01-01 00:00:00',
+            updatedAt: '2019-01-01 00:00:00'
+        }, {
+            descricao: 'Parecer CCC em Análise SAC',
+            id_perfil: 8,
+            createdAt: '2019-01-01 00:00:00',
+            updatedAt: '2019-01-01 00:00:00'
+        }, {
+            descricao: 'Em Análise Shriner Aprovador Templo',
+            id_perfil: 9,
+            createdAt: '2019-01-01 00:00:00',
+            updatedAt: '2019-01-01 00:00:00'
+        }, {
+            descricao: 'Em Análise Comitê Comunitário Templo',
+            id_perfil: 10,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         },{
-            descricao: 'Shriner Nacional - Em análise',
-            id_perfil: 6,
+            descricao: 'Parecer CCT em Análise SAT',
+            id_perfil: 11,
             createdAt: '2019-01-01 00:00:00',
             updatedAt: '2019-01-01 00:00:00'
         }, {
-            descricao: 'Shriner Nacional - Resolvido',
-            id_perfil: 2,
-            createdAt: '2019-01-01 00:00:00',
-            updatedAt: '2019-01-01 00:00:00'
-        }    ], {});
+          descricao: 'Concluído',
+          id_perfil: 11,
+          createdAt: '2019-01-01 00:00:00',
+          updatedAt: '2019-01-01 00:00:00'
+      }
+    ], {});
   },
 
   down: (queryInterface, Sequelize) => {

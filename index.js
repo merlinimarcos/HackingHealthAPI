@@ -36,6 +36,10 @@ var ProcessosController = require('./app/controllers/ProcessosController')
 var LoginController = require('./app/controllers/LoginController')
 var SolicitacoesSolicitanteController = require('./app/controllers/SolicitacoesSolicitanteController')
 var SolicitacoesAprovacaoController = require('./app/controllers/SolicitacoesAprovacaoController')
+var UsuariosController = require('./app/controllers/UsuariosController')
+
+var CominteComunitarioRegionalController = require('./app/controllers/CominteComunitarioRegionalController')
+
 
 
 var swaggerUi = require('swagger-ui-express');
@@ -94,7 +98,10 @@ app.use('/modeloprocessos', ModeloProcessosController);
 app.use('/processos', ProcessosController);
 app.use('/login', LoginController);
 app.use('/solicitacoes-solicitante', SolicitacoesSolicitanteController);
-
 app.use('/solicitacoes-aprovacao', SolicitacoesAprovacaoController);
+app.use('/usuarios', UsuariosController);
+
+app.use('/comite-comunitario-regional', CominteComunitarioRegionalController);
+
 
 app.listen(8080)

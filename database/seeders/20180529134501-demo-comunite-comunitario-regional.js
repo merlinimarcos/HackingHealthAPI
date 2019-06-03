@@ -2,21 +2,15 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Pessoas', [{
-		  nome: "Hospital teste",
-	    endereco: "Hospital teste",
-	    email: "hospital_teste@teste.com",
-	    cep: "89809-999",
-	    cidade: 555,
-	    bairro: "Centro",
-	    rua: "A",
-	    estado_civil: "-",
-	    end_numero: "8989",
-      end_complemento: "Casa",
-      telefone: "(49) 3333-3333",
+    return queryInterface.bulkInsert('ComiteComunitarioRegional', [{
+      descricao: 'comite regional 1',
       createdAt: '2019-01-01 00:00:00',
       updatedAt: '2019-01-01 00:00:00'
-    }], {});
+    }, {
+        descricao: 'comite regional 2',
+        createdAt: '2019-01-01 00:00:00',
+        updatedAt: '2019-01-01 00:00:00'
+      }], {});
   },
 
   down: (queryInterface, Sequelize) => {
