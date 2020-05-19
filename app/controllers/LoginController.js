@@ -31,15 +31,23 @@ var jwt = require('jsonwebtoken');
  *          description: Erro que não foi recuperar dados
  */
 router.post('/', function (req, resp) {
-    models.Usuario.findOne({ where : {
-            login : req.body.login,
-        }})
+    models.Usuario.findOne({ 
+            include:[{
+                model: models.Perfil,
+               attributes: ["id"]
+            }],
+            where : { login : req.body.login }
+        })
         .then(usuario => {
             if (!usuario || !bcrypt.compareSync(req.body.senha, usuario.senha))
                 resp.status(403).send({ error: "Login inválido!" });
 
             const id = usuario.id;
-            var token = jwt.sign({ id }, process.env.SECRET, {
+            const perfis = usuario.Perfils.map(function (perfil) {
+                return perfil['id'];
+            });
+   
+            var token = jwt.sign({ id: id, perfis: perfis }, process.env.SECRET, {
             expiresIn: 864000 
         });
 
