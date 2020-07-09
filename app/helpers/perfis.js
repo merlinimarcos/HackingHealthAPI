@@ -1,7 +1,7 @@
 module.exports = {
     // Arquivo contendo todos os perfis e url's que podem ser acessadas por eles
     // 1 - Admin
-    1 : ['/login'],
+    1 : ['/login', '/usuarios', '/perfis', '/materiais', '/modeloprocessos', '/pessoas', '/redes'],
     // 2 - Solicitante 
     2 : [],
     // 3 - Triagem
